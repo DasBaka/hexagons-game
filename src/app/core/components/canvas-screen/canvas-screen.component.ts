@@ -1,11 +1,16 @@
-import { AfterContentInit, AfterViewInit, Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import Konva from 'konva';
 import { Layer } from 'konva/lib/Layer';
 import { Stage } from 'konva/lib/Stage';
+import { Subscription } from 'rxjs';
+import { storeFeature } from '../../../store/store.feature';
+import { State } from '../../../store/store.interfaces';
 import { Hexagon } from '../../models/classes/hexagon.class';
+import { CanvasScreenService } from '../../services/game-board-hexagons.service';
 
 const initialWidth = 500;
-const initialHeigth = 500;
+const initialHeight = 500;
 
 @Component({
 	selector: 'app-canvas-screen',
@@ -13,53 +18,86 @@ const initialHeigth = 500;
 	templateUrl: './canvas-screen.component.html',
 	styleUrl: './canvas-screen.component.scss',
 })
-export class CanvasScreenComponent implements AfterViewInit, AfterContentInit {
-	stage!: Stage;
-	layer!: Layer;
-	sceneWidth = initialWidth;
-	sceneHeight = initialHeigth;
+export class CanvasScreenComponent implements OnInit, OnDestroy {
+	public stage!: Stage;
+	public layer!: Layer;
+	private sceneWidth = initialWidth;
+	private sceneHeight = initialHeight;
+	private hexagonsData: Array<{ x: number; y: number; radius: number }> = [];
+	private hexagonsSubscription: Subscription | undefined;
 
-	constructor(private ngZone: NgZone) {}
-
-	ngAfterViewInit() {
-		this.stage = new Konva.Stage({
-			container: 'screen',
-			width: this.sceneWidth,
-			height: this.sceneHeight,
-		});
-
-		this.layer = new Konva.Layer();
-
-		var hexagon = new Hexagon(this.sceneWidth / 2, this.sceneHeight / 2, this.sceneWidth);
-
-		// add the shape to the layer
-		this.layer.add(hexagon);
-
-		// add the this.layer to the this.stage
-		this.stage.add(this.layer);
-
-		this.layer.draw();
-		window.addEventListener('resize', this.fitStageIntoParentContainer.bind(this));
+	constructor(private ngZone: NgZone, private hexCreator: CanvasScreenService, private store: Store<State>) {
+		this.hexCreator.createHexesData(this.sceneWidth / 2, this.sceneHeight / 2, Math.min(this.sceneWidth, this.sceneHeight) / 50);
 	}
 
-	ngAfterContentInit() {
-		// Use setTimeout to ensure DOM is fully rendered
-		setTimeout(() => {
+	ngOnInit() {
+		this.waitForElement('screen').then(() => {
+			this.stage = new Konva.Stage({
+				container: 'screen',
+				width: this.sceneWidth,
+				height: this.sceneHeight,
+			});
+
+			this.layer = new Konva.Layer();
+			this.stage.add(this.layer);
+
+			this.hexagonsSubscription = this.store.select(storeFeature.selectBoardHexagons).subscribe((hexagons) => (this.hexagonsData = hexagons));
+
+			this.drawHex();
+
+			window.addEventListener('resize', this.fitStageIntoParentContainer.bind(this));
+
 			this.ngZone.run(() => {
 				this.fitStageIntoParentContainer();
 			});
-		}, 0);
+		});
+	}
+
+	ngOnDestroy() {
+		if (this.hexagonsSubscription) {
+			this.hexagonsSubscription.unsubscribe();
+		}
+		window.removeEventListener('resize', this.fitStageIntoParentContainer.bind(this));
+	}
+
+	drawHex() {
+		this.layer.clear();
+		for (let hex of this.hexagonsData) {
+			const hexagon = new Hexagon(hex.x, hex.y, hex.radius);
+			this.layer.add(hexagon);
+		}
+		this.layer.draw();
+	}
+
+	private waitForElement(id: string): Promise<void> {
+		return new Promise((resolve) => {
+			if (document.getElementById(id)) {
+				return resolve();
+			}
+
+			const observer = new MutationObserver(() => {
+				if (document.getElementById(id)) {
+					resolve();
+					observer.disconnect();
+				}
+			});
+
+			observer.observe(document.body, {
+				childList: true,
+				subtree: true,
+			});
+		});
 	}
 
 	fitStageIntoParentContainer() {
-		var container = document.getElementById('stage-parent');
+		const container = document.getElementById('screen');
 		this.sceneWidth = initialWidth;
-		this.sceneHeight = initialHeigth;
+		this.sceneHeight = initialHeight;
 
 		if (container && this.stage) {
-			var containerWidth = container.offsetWidth;
-			var containerHeight = container.offsetHeight;
-			var scale = Math.min(containerWidth / this.sceneWidth, containerHeight / this.sceneHeight);
+			const containerWidth = container.offsetWidth;
+			const containerHeight = container.offsetHeight;
+			const scale = Math.min(containerWidth / this.sceneWidth, containerHeight / this.sceneHeight);
 
 			this.stage.width(this.sceneWidth * scale);
 			this.stage.height(this.sceneHeight * scale);

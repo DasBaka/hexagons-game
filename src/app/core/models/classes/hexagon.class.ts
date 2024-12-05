@@ -6,7 +6,7 @@ export class Hexagon extends Konva.RegularPolygon {
 		this.x(x);
 		this.y(y);
 		this.sides(6);
-		this.radius(radius / 50);
+		this.radius(radius);
 		this.stroke('black');
 		this.strokeWidth(2);
 		this.fill('red');
