@@ -9,8 +9,8 @@ import { State } from '../../../store/store.interfaces';
 import { Hexagon } from '../../models/classes/hexagon.class';
 import { CanvasScreenService } from '../../services/game-board-hexagons.service';
 
-const initialWidth = 500;
-const initialHeight = 500;
+const initialWidth = 1000;
+const initialHeight = 1000;
 
 @Component({
 	selector: 'app-canvas-screen',
@@ -23,7 +23,7 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
 	public layer!: Layer;
 	private sceneWidth = initialWidth;
 	private sceneHeight = initialHeight;
-	private hexagonsData: Array<{ x: number; y: number; radius: number }> = [];
+	private hexagonsData: Array<{ x: number; y: number; radius: number; rotation: number; color: string }> = [];
 	private hexagonsSubscription: Subscription | undefined;
 
 	constructor(private ngZone: NgZone, private hexCreator: CanvasScreenService, private store: Store<State>) {
@@ -63,7 +63,7 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
 	drawHex() {
 		this.layer.clear();
 		for (let hex of this.hexagonsData) {
-			const hexagon = new Hexagon(hex.x, hex.y, hex.radius);
+			const hexagon = new Hexagon(hex.x, hex.y, hex.radius, hex.rotation, hex.color);
 			this.layer.add(hexagon);
 		}
 		this.layer.draw();

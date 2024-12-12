@@ -1,5 +1,5 @@
 export interface State {
-	boardHexagons: Array<{ x: number; y: number; radius: number }>;
+	boardHexagons: Array<{ x: number; y: number; radius: number; rotation: number; color: string }>;
 	counter: number;
 }
 
