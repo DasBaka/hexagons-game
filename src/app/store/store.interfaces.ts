@@ -1,5 +1,7 @@
+import { BoardHexDataInterface } from '../core/models/interfaces/board-hex-data.interface';
+
 export interface State {
-	boardHexagons: Array<{ x: number; y: number; radius: number; rotation: number; color: string }>;
+	boardHexagons: Array<BoardHexDataInterface[]>;
 	counter: number;
 }
 

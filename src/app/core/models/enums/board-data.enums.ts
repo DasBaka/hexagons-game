@@ -1,5 +1,5 @@
 export enum HexColor {
-	Basic = 'white',
+	Basic = 'transparent',
 	Center = 'gray',
 	Starter = 'green',
 	Tree = 'lightgreen',
