@@ -7,5 +7,10 @@ import { storeFeature } from './store/store.feature';
 // import { reducers } from './store/reducers';
 
 export const appConfig: ApplicationConfig = {
-	providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideStore(), provideState(storeFeature)],
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideStore(),
+    provideState(storeFeature)
+  ]
 };

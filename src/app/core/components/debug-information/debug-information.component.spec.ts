@@ -9,8 +9,7 @@ describe('DebugInformationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DebugInformationComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DebugInformationComponent);
     component = fixture.componentInstance;

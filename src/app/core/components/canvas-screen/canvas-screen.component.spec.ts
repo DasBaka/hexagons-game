@@ -9,8 +9,7 @@ describe('CanvasScreenComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CanvasScreenComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CanvasScreenComponent);
     component = fixture.componentInstance;

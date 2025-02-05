@@ -1,0 +1,65 @@
+{
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "css.lint.duplicateProperties": "warning",
+  "css.lint.important": "warning",
+  "css.lint.zeroUnits": "warning",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "editor.guides.bracketPairs": true,
+  "editor.guides.bracketPairsHorizontal": "active",
+  "editor.guides.highlightActiveIndentation": true,
+  "editor.linkedEditing": true,
+  "editor.quickSuggestions": {
+    "comments": "inline",
+    "strings": "inline"
+  },
+  "editor.renderFinalNewline": "on",
+  "editor.renderWhitespace": "all",
+  "editor.rulers": [
+    125
+  ],
+  "editor.suggest.snippetsPreventQuickSuggestions": true,
+  "editor.tabCompletion": "onlySnippets",
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.ignoreUntitled": true,
+  "eslint.onIgnoredFiles": "warn",
+  "eslint.useFlatConfig": true,
+  "explorer.compactFolders": false,
+  "files.encoding": "utf8",
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "lingua.defaultLanguage": "'en'",
+  "prettier.requireConfig": true,
+  "scss.lint.duplicateProperties": "warning",
+  "scss.lint.important": "warning",
+  "scss.lint.zeroUnits": "warning",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vsicons.dontShowNewVersionMessage": true,
+  "workbench.colorCustomizations": {
+    "[Panda Syntax]": {
+      "editorBracketPairGuide.activeBackground1": "#FFB86C",
+      "editorBracketPairGuide.activeBackground2": "#FF75B5",
+      "editorBracketPairGuide.activeBackground3": "#45A9F9",
+      "editorBracketPairGuide.activeBackground4": "#B084EB",
+      "editorBracketPairGuide.activeBackground5": "#E6E6E6",
+      "editorBracketPairGuide.activeBackground6": "#19f9d8",
+      "editorBracketPairGuide.background1": "#FFB86C",
+      "editorBracketPairGuide.background2": "#FF75B5",
+      "editorBracketPairGuide.background3": "#45A9F9",
+      "editorBracketPairGuide.background4": "#B084EB",
+      "editorBracketPairGuide.background5": "#E6E6E6",
+      "editorBracketPairGuide.background6": "#19f9d8"
+    }
+  },
+  "workbench.editor.highlightModifiedTabs": true,
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.startupEditor": "none",
+  "window.title": "${dirty}${folderName}${separator}${activeEditorShort}"
+}

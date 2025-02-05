@@ -1,17 +1,17 @@
 import { HexagonAdjectants } from '../classes/hexagon-adjectants.class';
-import { HexColor } from '../enums/board-data.enums';
+import { HexagonInstanceType } from './hexagon-instance-type.interface';
 
 export interface BoardHexDataInterface {
-	x: number;
-	y: number;
-	radius: number;
-	rotation: number;
-	padding: number;
-	color: HexColor;
-	ringLevel: number;
-	id: number;
-	adjectants: HexagonAdjectants;
-	sequence: Array<String>;
-	adjectantsByName: Array<String>;
-	bridgesByName: Array<String>;
+  x: number;
+  y: number;
+  radius: number;
+  rotation: number;
+  padding: number;
+  instanceType: HexagonInstanceType;
+  ringLevel: number;
+  id: number;
+  adjectants: HexagonAdjectants;
+  sequence: string[];
+  adjectantsByName: string[];
+  bridgesByName: string[];
 }

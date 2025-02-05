@@ -1,0 +1,28 @@
+{
+  "printWidth": 125,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "requirePragma": false,
+  "insertPragma": false,
+  "endOfLine": "lf",
+  "embeddedLanguageFormatting": "off",
+  "singleAttributePerLine": true,
+  "overrides":
+    [
+      { "files": "*.scss", "options": { "singleQuote": false } },
+      { "files": "*.html", "options": { "printWidth": 200, "parser": "html", "singleAttributePerLine": false } },
+      {
+        "files": "*.component.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+}

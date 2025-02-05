@@ -1,11 +1,11 @@
 import { BoardHexDataInterface } from '../core/models/interfaces/board-hex-data.interface';
 
 export interface State {
-	boardHexagons: Array<BoardHexDataInterface[]>;
-	counter: number;
+  boardHexagons: BoardHexDataInterface[][];
+  counter: number;
 }
 
 export const initialState: State = {
-	boardHexagons: [],
-	counter: 0,
+  boardHexagons: [],
+  counter: 0
 };
