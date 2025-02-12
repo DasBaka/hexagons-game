@@ -1,4 +1,4 @@
-import { BoardHexOrientation, BoardHexType } from '../models/enums/board-data.enums';
+import { EBoardHexOrientation, EBoardHexType } from '../models/enums/board-data.enums';
 
 /** Represents the value of 2π (two times pi), commonly used in circular and trigonometric calculations for a full rotation. */
 export const PI2 = Math.PI * 2;
@@ -36,42 +36,42 @@ export const HEX_RING_CONFIGS = {
     INITIAL: {
       ringLevel: 0,
       isSubHex: false,
-      hexType: BoardHexType.InnerHex,
-      orientation: BoardHexOrientation.Angular
+      hexType: EBoardHexType.InnerHex,
+      orientation: EBoardHexOrientation.Angular
     },
     MAIN: {
       isSubHex: false,
-      hexType: BoardHexType.InnerHex,
-      orientation: BoardHexOrientation.Angular
+      hexType: EBoardHexType.InnerHex,
+      orientation: EBoardHexOrientation.Angular
     },
     SUB: {
       isSubHex: true,
-      hexType: BoardHexType.InnerHex,
-      orientation: BoardHexOrientation.Angular
+      hexType: EBoardHexType.InnerHex,
+      orientation: EBoardHexOrientation.Angular
     }
   },
   MIDDLE: {
     MAIN: {
       isSubHex: false,
-      hexType: BoardHexType.MiddleHex,
-      orientation: BoardHexOrientation.Flat
+      hexType: EBoardHexType.MiddleHex,
+      orientation: EBoardHexOrientation.Flat
     },
     SUB: {
       isSubHex: true,
-      hexType: BoardHexType.MiddleHex,
-      orientation: BoardHexOrientation.Flat
+      hexType: EBoardHexType.MiddleHex,
+      orientation: EBoardHexOrientation.Flat
     }
   },
   OUTER: {
     MAIN: {
       isSubHex: false,
-      hexType: BoardHexType.OuterHex,
-      orientation: BoardHexOrientation.Angular
+      hexType: EBoardHexType.OuterHex,
+      orientation: EBoardHexOrientation.Angular
     },
     SUB: {
       isSubHex: true,
-      hexType: BoardHexType.OuterHex,
-      orientation: BoardHexOrientation.Flat
+      hexType: EBoardHexType.OuterHex,
+      orientation: EBoardHexOrientation.Flat
     }
   }
 };

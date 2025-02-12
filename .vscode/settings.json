@@ -35,7 +35,6 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "lingua.defaultLanguage": "'en'",
   "prettier.requireConfig": true,
   "scss.lint.duplicateProperties": "warning",
   "scss.lint.important": "warning",

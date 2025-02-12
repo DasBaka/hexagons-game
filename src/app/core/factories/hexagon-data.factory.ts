@@ -1,10 +1,10 @@
 import * as BoardConstants from '../constants/board-data.constants';
 
-import { BoardHexOrientation, BoardHexType } from '../models/enums/board-data.enums';
+import { EBoardHexOrientation, EBoardHexType } from '../models/enums/board-data.enums';
 
-import { BoardHexDataInterface } from '../models/interfaces/board-hex-data.interface';
 import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
-import { HexagonInstanceType } from '../models/interfaces/hexagon-instance-type.interface';
+import { IBoardHexData } from '../models/interfaces/board-hex-data.interface';
+import { IHexagonInstance } from '../models/interfaces/hexagon-instance-type.interface';
 
 /** Defines the properties required to create a hexagon data object using the HexagonDataFactory.*/
 export interface IHexagonDataFactoryProps {
@@ -14,8 +14,8 @@ export interface IHexagonDataFactoryProps {
   ringLevel: number;
   id: number;
   isSubHex: boolean;
-  hexType: BoardHexType;
-  orientation: BoardHexOrientation;
+  hexType: EBoardHexType;
+  orientation: EBoardHexOrientation;
   padding: number;
 }
 
@@ -32,13 +32,13 @@ export class HexagonDataFactory {
     hexType,
     orientation,
     padding
-  }: IHexagonDataFactoryProps): BoardHexDataInterface {
+  }: IHexagonDataFactoryProps): IBoardHexData {
     let radius = baseRadius;
     let rotation = 0;
-    let instanceType = { main: null, sub: null, border: false } as HexagonInstanceType;
+    let instanceType = { main: null, sub: null, border: false } as IHexagonInstance;
 
     switch (hexType) {
-      case BoardHexType.InnerHex:
+      case EBoardHexType.InnerHex:
         if (ringLevel === 0) {
           instanceType = { main: 'tar', sub: 'start', border: false };
         }
@@ -46,14 +46,14 @@ export class HexagonDataFactory {
           ringLevel += 1;
         }
         break;
-      case BoardHexType.MiddleHex:
+      case EBoardHexType.MiddleHex:
         rotation = 30;
         if (ringLevel === BoardConstants.MIDDLE_RING_RADIUS) {
           instanceType = isSubHex ? { main: null, sub: null, border: true } : { main: 'player', sub: 'tree', border: false };
         }
         ringLevel += 1;
         break;
-      case BoardHexType.OuterHex:
+      case EBoardHexType.OuterHex:
         rotation = 30;
         if (!isSubHex && ringLevel === BoardConstants.MIDDLE_RING_RADIUS + 1) {
           radius *= BoardConstants.STARTER_HEX_SIZE;

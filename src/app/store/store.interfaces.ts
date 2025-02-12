@@ -1,8 +1,8 @@
-import { BoardHexDataInterface } from '../core/models/interfaces/board-hex-data.interface';
+import { IBoardHexData } from '../core/models/interfaces/board-hex-data.interface';
 
 /** Represents the structure of the application's state, containing a 2D array of board hexagons and a numeric counter. */
 export interface IState {
-  boardHexagons: BoardHexDataInterface[][];
+  boardHexagons: IBoardHexData[][];
   counter: number;
 }
 

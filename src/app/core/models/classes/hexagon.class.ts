@@ -1,4 +1,4 @@
-import { HexagonInstanceType } from '../interfaces/hexagon-instance-type.interface';
+import { IHexagonInstance } from '../interfaces/hexagon-instance-type.interface';
 import Konva from 'konva';
 
 /** Defines the properties required to create a Hexagon instance. */
@@ -8,12 +8,12 @@ interface IHexagonProps {
   radius: number;
   rotation: number;
   name: string;
-  instanceType: HexagonInstanceType;
+  instanceType: IHexagonInstance;
 }
 
 /** Represents a hexagonal shape extending Konva.RegularPolygon with additional properties and methods for game board rendering. */
 export class Hexagon extends Konva.RegularPolygon {
-  public instanceType: HexagonInstanceType;
+  public instanceType: IHexagonInstance;
   constructor({ x, y, radius, rotation, instanceType, name }: IHexagonProps) {
     super();
     this.instanceType = instanceType;

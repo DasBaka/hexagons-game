@@ -1,4 +1,4 @@
-import { BoardHexDataInterface } from '../models/interfaces/board-hex-data.interface';
+import { IBoardHexData } from '../models/interfaces/board-hex-data.interface';
 
 /** Utility class providing static methods for calculating distances between points and hexagons on a 2D plane. */
 export class PointDistancesUtils {
@@ -11,7 +11,7 @@ export class PointDistancesUtils {
 
   /** Calculates the maximum distance to a hexagon based on its center point, radius, padding, and a scaling factor. */
   public static getMaxDistanceToHexagon(
-    hexagon: BoardHexDataInterface,
+    hexagon: IBoardHexData,
     centerPoint: { r: number; padding: number },
     factor: number
   ): number {
@@ -20,7 +20,7 @@ export class PointDistancesUtils {
 
   /** Determines if a hexagon is within a specific range of distances from a center point, using lower and upper factor bounds. */
   public static isInBetweenHexagonDistances(
-    hexagon: BoardHexDataInterface,
+    hexagon: IBoardHexData,
     centerPoint: { x: number; y: number; r: number; padding: number },
     lowerFactor: number,
     upperFactor: number

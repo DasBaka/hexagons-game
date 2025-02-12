@@ -1,4 +1,4 @@
-import { HexConnection } from '../types/hex-connection.type';
+import { THexConnection } from '../types/hex-connection.type';
 
 /** Represents the adjacent hexagons to a central hexagon on a hexagonal grid.*/
 export interface IAdjectant {
@@ -11,6 +11,6 @@ export interface IDirectionalHexData {
     x: number;
     y: number;
   };
-  adjectantTo: HexConnection[];
-  bridgeTo: HexConnection[];
+  adjectantTo: THexConnection[];
+  bridgeTo: THexConnection[];
 }
