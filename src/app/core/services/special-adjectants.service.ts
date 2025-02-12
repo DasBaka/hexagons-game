@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
-import { BoardHexDataInterface } from '../models/interfaces/board-hex-data.interface';
 import { AngleAndOrientationUtils } from '../utils/angle-and-orientation.utils';
+import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
+import { IBoardHexData } from '../models/interfaces/board-hex-data.interface';
+import { Injectable } from '@angular/core';
 import { PointDistancesUtils } from '../utils/points-distances.utils';
 
+/** Provides methods for finding and handling special adjacency cases in a hexagonal grid structure, particularly for complex edge cases in different ring levels. */
 @Injectable({
   providedIn: 'root'
 })
 export class SpecialAdjectantsService {
+  /** Finds and returns the corresponding adjectant for a given hexagon and angle. */
   public static findAdjectantsForSpecialCases(
     hexagonAdjectants: HexagonAdjectants,
-    hexagonArray: BoardHexDataInterface[][],
+    hexagonArray: IBoardHexData[][],
     currentAngle: number
   ) {
     if (
@@ -18,9 +20,9 @@ export class SpecialAdjectantsService {
       hexagonAdjectants._adjectants[currentAngle].adjectantTo.length === 0 &&
       hexagonAdjectants._adjectants[currentAngle].bridgeTo.length === 0
     ) {
-      let foundAdjectant: BoardHexDataInterface | undefined;
-      let counterPartAdjectant: BoardHexDataInterface | undefined;
-      const adjectantsArrayForLevel5: { angle: number; adjectant: BoardHexDataInterface[] }[] = [];
+      let foundAdjectant: IBoardHexData | undefined;
+      let counterPartAdjectant: IBoardHexData | undefined;
+      const adjectantsArrayForLevel5: { angle: number; adjectant: IBoardHexData[] }[] = [];
       let currentCoordinates = hexagonAdjectants._adjectants[currentAngle].direction;
       let orthogonalAngle = (currentAngle + 90) % 360;
       switch (hexagonAdjectants._ringLevel) {
@@ -45,8 +47,8 @@ export class SpecialAdjectantsService {
           break;
         case 5: {
           const counterAngle = (currentAngle + 180) % 360;
-          let level5FoundAdjectant: BoardHexDataInterface | undefined;
-          let level5FoundCounterAdjectant: BoardHexDataInterface | undefined;
+          let level5FoundAdjectant: IBoardHexData | undefined;
+          let level5FoundCounterAdjectant: IBoardHexData | undefined;
           if (hexagonAdjectants._id < 42) {
             if (hexagonAdjectants._adjectants[counterAngle].adjectantTo.length == 1) {
               level5FoundAdjectant = hexagonArray[6].find((hex, i, array) => {
@@ -146,8 +148,8 @@ export class SpecialAdjectantsService {
               (adjectantPair) => adjectantPair[1].adjectantTo.length === 1
             );
             if (foundAngle !== undefined) {
-              let level11FoundAdjectant: BoardHexDataInterface | undefined;
-              let level11FoundCounterAdjectant: BoardHexDataInterface | undefined;
+              let level11FoundAdjectant: IBoardHexData | undefined;
+              let level11FoundCounterAdjectant: IBoardHexData | undefined;
               const currentAngle = parseInt(foundAngle[0]);
               for (const otherAngle of [(currentAngle + 60) % 360, (currentAngle + 300) % 360]) {
                 currentCoordinates = hexagonAdjectants._adjectants[otherAngle].direction;

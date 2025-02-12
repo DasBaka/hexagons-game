@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
 import { CanvasScreenComponent } from './core/core.component';
+import { Component } from '@angular/core';
 
+/** Root component of the Hexagons application. */
 @Component({
   selector: 'app-root',
   imports: [CanvasScreenComponent],

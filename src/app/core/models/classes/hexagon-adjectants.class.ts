@@ -1,14 +1,15 @@
+import { AngleAndOrientationUtils } from '../../utils/angle-and-orientation.utils';
+import { BoardHexDataInterface } from '../interfaces/board-hex-data.interface';
+import { BoardHexOrientation } from '../enums/board-data.enums';
+import { IAdjectant } from '../interfaces/board-hex-adjectants.interface';
+import { PointDistancesUtils } from '../../utils/points-distances.utils';
 import { RingLevelSequencesFactory } from '../../factories/ringLevel-sequences.factory';
 import { SpecialAdjectantsService } from '../../services/special-adjectants.service';
-import { AngleAndOrientationUtils } from '../../utils/angle-and-orientation.utils';
-import { PointDistancesUtils } from '../../utils/points-distances.utils';
-import { BoardHexOrientation } from '../enums/board-data.enums';
-import { Adjectant } from '../interfaces/board-hex-adjectants.interface';
-import { BoardHexDataInterface } from '../interfaces/board-hex-data.interface';
 
+/** Represents a hexagon and manages its adjacency relationships with other hexagons in a hexagonal grid structure, including regular adjacents and special cases. */
 export class HexagonAdjectants {
   readonly _hexData: { x: number; y: number; r: number; padding: number } = { x: 0, y: 0, r: 0, padding: 1 };
-  _adjectants: Adjectant = {};
+  _adjectants: IAdjectant = {};
   _currentRing: BoardHexDataInterface[] = [];
   _unifiedAdjectantRings: BoardHexDataInterface[] = [];
 
@@ -25,6 +26,7 @@ export class HexagonAdjectants {
     this.initializeAdjectants(orientation);
   }
 
+  /** Initializes the adjacent hexagons for the current hexagon based on the given orientation, calculating their positions and angles. */
   private initializeAdjectants(orientation: BoardHexOrientation) {
     for (let i = 0; i < 6; i++) {
       // IMPORTANT: The adjectants direction angle is calculated to the x-axis, not the center of the hexagon (because of atan2), and then determined in clockwise order from the x-axis.
@@ -49,6 +51,7 @@ export class HexagonAdjectants {
     }
   }
 
+  /** Calculates the coordinates of the adjacent hexagon based on the given angle and the current hexagon's position. */
   private calculateAdjectantCoordinates(angle: number): { adjX: number; adjY: number } {
     const { x, y, r, padding } = this._hexData;
     return {
@@ -57,12 +60,14 @@ export class HexagonAdjectants {
     };
   }
 
+  /** Validates the given hexagon angle to ensure it is a multiple of 30 degrees. */
   private validateHexagonAngle(angle: number): void {
     if (angle % 30 !== 0) {
       throw new Error('Invalid hexagon angle: ' + angle + ' is not a multiple of 30 degrees');
     }
   }
 
+  /** Populates the current ring and unified adjacent rings arrays with hexagons from the surrounding rings in the hexagonal grid structure. */
   private getRingArrays(hexagonArray: BoardHexDataInterface[][]): void {
     const prePreviousRing = hexagonArray[this._ringLevel - 2] ?? [];
     const previousRing = hexagonArray[this._ringLevel - 1] ?? [];
@@ -72,12 +77,14 @@ export class HexagonAdjectants {
     this._unifiedAdjectantRings = [...prePreviousRing, ...previousRing, ...this._currentRing, ...nextRing, ...nextNextRing];
   }
 
+  /** Adds a new adjacent or bridge hexagon to the specified angle's array of connections based on the given type, angle, and hexagon data. */
   public pushAdjectant(type: 'adjectant' | 'bridge', currentAngle: number, hexagon: BoardHexDataInterface) {
     const targetArray =
       type === 'adjectant' ? this._adjectants[currentAngle].adjectantTo : this._adjectants[currentAngle].bridgeTo;
     targetArray.push({ ringLevel: hexagon.ringLevel, id: hexagon.id });
   }
 
+  /** Searches for a hexagon in the given ring level array that aligns with the current angle and falls within the specified distance range, optionally allowing for a slight angular deviation. */
   public findCurrentPossibleHexagon(
     ringLevelArray: BoardHexDataInterface[],
     currentAngle: number,
@@ -92,6 +99,7 @@ export class HexagonAdjectants {
     );
   }
 
+  /** Identifies and populates the corresponding adjacent hexagons for the current hexagon by analyzing the provided hexagon array, including regular and special adjacency cases, and generates hexagon sequences. */
   public findCorrespondingAdjectants(hexagonArray: BoardHexDataInterface[][]) {
     this.getRingArrays(hexagonArray);
     this.findRegularAdjectants(hexagonArray);
@@ -99,6 +107,7 @@ export class HexagonAdjectants {
     RingLevelSequencesFactory.getHexSequences(this);
   }
 
+  /** Identifies and assigns regular adjacent hexagons for the current hexagon by iterating through all angles and searching for matching hexagons in the unified adjacent rings array. */
   private findRegularAdjectants(hexagonArray: BoardHexDataInterface[][]) {
     Object.keys(this._adjectants).forEach((angleKey) => {
       const currentAngle = parseInt(angleKey);
@@ -116,6 +125,7 @@ export class HexagonAdjectants {
     });
   }
 
+  /** Identifies and assigns special adjacent hexagons for the current hexagon by iterating through all angles and applying special adjacency rules and generating bridge hexagon sequences. */
   private findSpecialAdjectants(hexagonArray: BoardHexDataInterface[][]) {
     Object.keys(this._adjectants).forEach((angleKey) => {
       const currentAngle = parseInt(angleKey);
@@ -123,6 +133,7 @@ export class HexagonAdjectants {
     });
   }
 
+  /** Identifies and assigns bridge hexagons for the current hexagon by iterating through all angles and searching for matching hexagons in the next or nearby rings with a maximum of 2r distance to connect to the current hexagon. */
   private findBridges(hexagonArray: BoardHexDataInterface[][], currentAngle: number) {
     const foundBridge = this.findCurrentPossibleHexagon(this._unifiedAdjectantRings, currentAngle, [2, 4]);
 

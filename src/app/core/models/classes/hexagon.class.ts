@@ -1,7 +1,8 @@
-import Konva from 'konva';
 import { HexagonInstanceType } from '../interfaces/hexagon-instance-type.interface';
+import Konva from 'konva';
 
-interface HexagonProps {
+/** Defines the properties required to create a Hexagon instance. */
+interface IHexagonProps {
   x: number;
   y: number;
   radius: number;
@@ -10,9 +11,10 @@ interface HexagonProps {
   instanceType: HexagonInstanceType;
 }
 
+/** Represents a hexagonal shape extending Konva.RegularPolygon with additional properties and methods for game board rendering. */
 export class Hexagon extends Konva.RegularPolygon {
   public instanceType: HexagonInstanceType;
-  constructor({ x, y, radius, rotation, instanceType, name }: HexagonProps) {
+  constructor({ x, y, radius, rotation, instanceType, name }: IHexagonProps) {
     super();
     this.instanceType = instanceType;
     this.stroke('black');
@@ -27,6 +29,7 @@ export class Hexagon extends Konva.RegularPolygon {
     this.id(name);
   }
 
+  /** Sets the base color of the hexagon based on its instance type. */
   public setBaseColor() {
     switch (this.instanceType.main) {
       case 'tar':
@@ -43,6 +46,7 @@ export class Hexagon extends Konva.RegularPolygon {
     }
   }
 
+  /** Changes the fill color of the hexagon to the specified color. */
   public recolor(color: string) {
     this.fill(color);
   }

@@ -61,5 +61,9 @@
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.iconTheme": "vscode-icons",
   "workbench.startupEditor": "none",
-  "window.title": "${dirty}${folderName}${separator}${activeEditorShort}"
+  "window.title": "${dirty}${folderName}${separator}${activeEditorShort}",
+  "errorLens.excludePatterns": [
+    "**/*.html"
+  ],
+  "tabnine.codeLensEnabled": true,
 }

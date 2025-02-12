@@ -1,24 +1,27 @@
+import * as BoardConstants from '../constants/board-data.constants';
+
+import { HexagonDataFactory, IHexagonDataFactoryProps } from '../factories/hexagon-data.factory';
+
+import { EBoardHexOrientation } from '../models/enums/board-data.enums';
+import { IBoardHexData } from '../models/interfaces/board-hex-data.interface';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { updateStore } from '../../store/store.feature';
 
-import * as BoardConstants from '../constants/board-data.constants';
-import { HexagonDataFactory, HexagonDataFactoryProps } from '../factories/hexagon-data.factory';
-import { BoardHexOrientation } from '../models/enums/board-data.enums';
-import { BoardHexDataInterface } from '../models/interfaces/board-hex-data.interface';
-
+/** Service responsible for creating and managing hexagonal data structures for a game board canvas. */
 @Injectable({
   providedIn: 'root'
 })
 export class CanvasScreenService {
   paddingRatio: number = BoardConstants.DEFAULT_PADDING_RATIO;
-  hexagonArray: BoardHexDataInterface[][] = [];
+  hexagonArray: IBoardHexData[][] = [];
   baseHexData: { x: number; y: number; r: number } = { x: 0, y: 0, r: 0 };
   currentHexPosition: { x: number; y: number } = { x: 0, y: 0 };
   id: number = 0;
 
   constructor(private store: Store) {}
 
+  /** Initializes and generates the hexagonal grid data structure based on the provided center coordinates and hexagon radius. */
   public createHexesData(centerX: number, centerY: number, hexRadius: number) {
     if (centerX < 0 || centerY < 0 || hexRadius <= 0) {
       throw new Error('Invalid input parameters for createHexesData');
@@ -41,10 +44,11 @@ export class CanvasScreenService {
     this.store.dispatch(updateStore({ key: 'boardHexagons', value: this.hexagonArray }));
   }
 
+  /** Calculates the x and y coordinates of a hexagon based on its position in the grid, orientation, and whether it's a sub-hexagon. */
   private calcCurrentPosition(
     sideIndex: number,
     ringLevel: number,
-    orientation: BoardHexOrientation,
+    orientation: EBoardHexOrientation,
     subHex: boolean
   ): { x: number; y: number } {
     const angle = (sideIndex * BoardConstants.PI2) / 6 + (subHex === true ? BoardConstants.PI2 / 3 : 0);
@@ -52,7 +56,7 @@ export class CanvasScreenService {
     const [sin, cos] = [Math.sin(angle) * distance, Math.cos(angle) * distance];
     const { x, y } = subHex === true ? this.currentHexPosition : this.baseHexData;
     const currentCoords: { x: number; y: number } =
-      orientation === BoardHexOrientation.Angular ? { x: x + cos, y: y + sin } : { x: x + sin, y: y + cos };
+      orientation === EBoardHexOrientation.Angular ? { x: x + cos, y: y + sin } : { x: x + sin, y: y + cos };
 
     if (subHex === false) {
       this.currentHexPosition = { ...currentCoords };
@@ -61,7 +65,8 @@ export class CanvasScreenService {
     return { ...currentCoords };
   }
 
-  private addHexagonData(hexagonData: BoardHexDataInterface) {
+  /** Adds a new hexagon data object to the hexagonArray, creating a new array for the ring level if it doesn't exist. */
+  private addHexagonData(hexagonData: IBoardHexData) {
     if (this.hexagonArray[hexagonData.ringLevel] === undefined) {
       this.hexagonArray[hexagonData.ringLevel] = [];
     }
@@ -69,7 +74,8 @@ export class CanvasScreenService {
     this.id++;
   }
 
-  private createSingleHexagonData(props: Omit<HexagonDataFactoryProps, 'baseRadius' | 'padding'>): BoardHexDataInterface {
+  /** Creates a single hexagon data object using the HexagonDataFactory, applying the base radius and padding ratio from the service. */
+  private createSingleHexagonData(props: Omit<IHexagonDataFactoryProps, 'baseRadius' | 'padding'>): IBoardHexData {
     return HexagonDataFactory.createSingleHexagonData({
       ...props,
       baseRadius: this.baseHexData.r,
@@ -77,6 +83,7 @@ export class CanvasScreenService {
     });
   }
 
+  /** Creates the inner hexagon structure of the game board, including the central hexagon and its surrounding rings. */
   private createInnerHex() {
     const [x, y] = [this.baseHexData.x, this.baseHexData.y];
     const id = this.id;
@@ -90,6 +97,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the main hexagons for the inner ring of the game board, based on the current ring level and the innermost ring's end point. */
   private createInnerMainHexes(ringLevel: number, innerHexEnd: number) {
     const limitInnerHex = ringLevel < innerHexEnd;
     const blocker = ringLevel !== 2;
@@ -107,6 +115,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the sub-hexagons for the inner ring of the game board, based on the current ring level, side index, and the innermost ring's end point. */
   private createInnerSubHexes(ringLevel: number, sideIndex: number, innerHexEnd: number) {
     const innerSubProps = BoardConstants.HEX_RING_CONFIGS.INNER.SUB;
     for (let subHexIndex = 1; subHexIndex < ringLevel; subHexIndex++) {
@@ -121,6 +130,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the middle ring of hexagons for the game board, adjusting padding ratios and generating main and sub-hexagons within the specified range. */
   private createMiddleHex() {
     this.paddingRatio = BoardConstants.MIDDLE_HEX_PADDING_RATIO_INITIAL;
 
@@ -132,6 +142,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the main hexagons for the middle ring of the game board, based on the current ring level and the middle ring's end point. */
   private createMiddleMainHexes(ringLevel: number, middleHexStart: number, middleHexEnd: number) {
     const isBlockerLevelCase = ringLevel != BoardConstants.INNER_RING_RADIUS;
     const middleMainProps = BoardConstants.HEX_RING_CONFIGS.MIDDLE.MAIN;
@@ -150,6 +161,7 @@ export class CanvasScreenService {
     if (ringLevel > middleHexStart) this.paddingRatio = BoardConstants.MIDDLE_PADDING_RATIO_RESET;
   }
 
+  /** Creates the sub-hexagons for the middle ring of the game board, based on the current ring level, side index, and the middle ring's end point. */
   private createMiddleSubHexes(ringLevel: number, sideIndex: number, middleHexStart: number, isBlockerLevelCase: boolean) {
     const middleSubProps = BoardConstants.HEX_RING_CONFIGS.MIDDLE.SUB;
     for (let subHexIndex = 1; subHexIndex < ringLevel; subHexIndex++) {
@@ -167,6 +179,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the outer ring of hexagons for the game board, adjusting padding ratios and generating main and sub-hexagons within the specified range. */
   private createOuterHex() {
     const outerHexStart = BoardConstants.MIDDLE_RING_RADIUS + 1;
     const outerHexEnd = BoardConstants.MIDDLE_RING_RADIUS + 2;
@@ -176,6 +189,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Creates the main hexagons for the outer ring of the game board, based on the current ring level and the outer ring's end point. */
   private createOuterMainHexes(ringLevel: number, outerHexStart: number, outerHexEnd: number) {
     this.paddingRatio = BoardConstants.OUTER_HEX_PADDING_RATIO;
     const outerSubProps = BoardConstants.HEX_RING_CONFIGS.OUTER.SUB;
@@ -205,6 +219,7 @@ export class CanvasScreenService {
     }
   }
 
+  /** Calculates the current position for a hexagon based on its side index, ring level, orientation, and sub-hex status. */
   private createStarters(ringLevel: number) {
     this.paddingRatio = BoardConstants.OUTER_HEX_PADDING_RATIO_FOR_STARTERS;
     const outerMainProps = BoardConstants.HEX_RING_CONFIGS.OUTER.MAIN;

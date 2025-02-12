@@ -1,22 +1,23 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+
+import { BoardHexDataInterface } from '../../models/interfaces/board-hex-data.interface';
+import { CanvasScreenService } from '../../services/game-board-hexagons.service';
+import { Hexagon } from '../../models/classes/hexagon.class';
+import { IState } from '../../../store/store.interfaces';
 import Konva from 'konva';
 import { Layer } from 'konva/lib/Layer';
 import { Stage } from 'konva/lib/Stage';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { storeFeature } from '../../../store/store.feature';
-import { State } from '../../../store/store.interfaces';
-import { Hexagon } from '../../models/classes/hexagon.class';
-import { BoardHexDataInterface } from '../../models/interfaces/board-hex-data.interface';
-import { CanvasScreenService } from '../../services/game-board-hexagons.service';
-import { DebugInformationComponent } from '../debug-information/debug-information.component';
 
 const initialWidth = 1000;
 const initialHeight = 1000;
 
+/** Component responsible for rendering and managing the canvas screen.*/
 @Component({
   selector: 'app-canvas-screen',
-  imports: [DebugInformationComponent],
+  imports: [],
   templateUrl: './canvas-screen.component.html',
   styleUrl: './canvas-screen.component.scss'
 })
@@ -31,7 +32,7 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     private hexCreator: CanvasScreenService,
-    private store: Store<State>
+    private store: Store<IState>
   ) {
     this.hexCreator.createHexesData(
       this.sceneWidth / 2,
@@ -72,7 +73,8 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
     window.removeEventListener('resize', this.fitStageIntoParentContainer.bind(this));
   }
 
-  private drawHex() {
+  /** Draws hexagons on the Konva layer based on the current hexagon data.*/
+  private drawHex(): void {
     this.layer.clear();
     for (let level = 0; level < this.hexagonsData.length; level++) {
       const currentLevel = this.hexagonsData[level];
@@ -126,6 +128,7 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
     this.layer.draw();
   }
 
+  /** Returns a Promise that resolves when an element with the specified ID is found in the DOM.*/
   private waitForElement(id: string): Promise<void> {
     return new Promise((resolve) => {
       if (document.getElementById(id)) {
@@ -146,6 +149,7 @@ export class CanvasScreenComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Adjusts the size and scale of the Konva stage to fit within its parent container.*/
   private fitStageIntoParentContainer() {
     const container = document.getElementById('screen');
     this.sceneWidth = initialWidth;

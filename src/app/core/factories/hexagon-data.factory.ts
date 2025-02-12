@@ -1,10 +1,13 @@
 import * as BoardConstants from '../constants/board-data.constants';
-import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
+
 import { BoardHexOrientation, BoardHexType } from '../models/enums/board-data.enums';
+
 import { BoardHexDataInterface } from '../models/interfaces/board-hex-data.interface';
+import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
 import { HexagonInstanceType } from '../models/interfaces/hexagon-instance-type.interface';
 
-export interface HexagonDataFactoryProps {
+/** Defines the properties required to create a hexagon data object using the HexagonDataFactory.*/
+export interface IHexagonDataFactoryProps {
   x: number;
   y: number;
   baseRadius: number;
@@ -16,7 +19,9 @@ export interface HexagonDataFactoryProps {
   padding: number;
 }
 
+/** Factory class responsible for creating and configuring hexagon data objects with specific properties and behaviors based on the provided parameters. */
 export class HexagonDataFactory {
+  /** Creates and returns a single hexagon data object with calculated properties based on the input parameters, determining its position, size, type, and behavior within the game board. */
   public static createSingleHexagonData({
     x,
     y,
@@ -27,7 +32,7 @@ export class HexagonDataFactory {
     hexType,
     orientation,
     padding
-  }: HexagonDataFactoryProps): BoardHexDataInterface {
+  }: IHexagonDataFactoryProps): BoardHexDataInterface {
     let radius = baseRadius;
     let rotation = 0;
     let instanceType = { main: null, sub: null, border: false } as HexagonInstanceType;

@@ -1,13 +1,14 @@
 import { HexagonAdjectants } from '../classes/hexagon-adjectants.class';
-import { HexagonInstanceType } from './hexagon-instance-type.interface';
+import { IHexagonInstance } from './hexagon-instance-type.interface';
 
-export interface BoardHexDataInterface {
+/** Defines the structure for hexagon data on the game board, including position, size, orientation, type, adjacency information, and related sequences. */
+export interface IBoardHexData {
   x: number;
   y: number;
   radius: number;
   rotation: number;
   padding: number;
-  instanceType: HexagonInstanceType;
+  instanceType: IHexagonInstance;
   ringLevel: number;
   id: number;
   adjectants: HexagonAdjectants;

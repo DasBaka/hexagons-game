@@ -1,16 +1,21 @@
 import * as BoardConstants from '../constants/board-data.constants';
+
 import { BoardHexOrientation } from '../models/enums/board-data.enums';
 
+/** Utility class providing static methods for calculating angles, orientations, and geometric relationships in a hexagonal grid system. */
 export class AngleAndOrientationUtils {
+  /** Calculates the orientation angle for a hexagon based on its index and orientation type in a hexagonal grid system. */
   public static calculateOrientationAngle(i: number, orientation: BoardHexOrientation): number {
     return (BoardConstants.PI2 / 6) * i + (orientation == BoardHexOrientation.Angular ? 0 : BoardConstants.PI2 / 12);
   }
 
+  /** Calculates and rounds the angle between a point (adjX, adjY) and the center (centerX, centerY) to the nearest 30-degree increment in a hexagonal grid. */
   public static calculateRoundedHexAngle(adjX: number, adjY: number, centerX: number, centerY: number): number {
     const hexAngle = Math.round(((Math.atan2(adjY - centerY, adjX - centerX) * 180) / Math.PI + 360) % 360);
     return (Math.round(hexAngle / 30) * 30) % 360;
   }
 
+  /** Determines if two points are approximately on the same line given a reference angle and a tolerance value. */
   public static arePointsOnSameLine(
     point1: { x: number; y: number },
     point2: { x: number; y: number },

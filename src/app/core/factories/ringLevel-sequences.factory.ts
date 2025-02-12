@@ -1,7 +1,9 @@
 import { HexagonAdjectants } from '../models/classes/hexagon-adjectants.class';
-import { DirectionalHexData } from '../models/interfaces/board-hex-adjectants.interface';
+import { IDirectionalHexData } from '../models/interfaces/board-hex-adjectants.interface';
 
+/** Factory class responsible for generating and processing sequences of hexagons within ring levels, including adjacency and bridge relationships between hexagons. */
 export class RingLevelSequencesFactory {
+  /** Processes the given hexagon adjacents, generating sequences of adjacent and bridged hexagons, and updates the current hexagon with this information. */
   public static getHexSequences(hexagonAdjectants: HexagonAdjectants) {
     const currentHex = hexagonAdjectants._currentRing.find((hex) => hex.id === hexagonAdjectants._id);
     if (currentHex !== undefined) {
@@ -16,8 +18,9 @@ export class RingLevelSequencesFactory {
     }
   }
 
+  /** Helper method to trim adjectants and bridge information to a single string, suitable for storing in the sequence attribute of a hexagon. */
   private static trimmingAdjectants(
-    adjectant: DirectionalHexData,
+    adjectant: IDirectionalHexData,
     adjectantsByName: string[],
     bridgesByName: string[]
   ): string {
